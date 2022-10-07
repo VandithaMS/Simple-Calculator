@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calculator</title>
+        <link rel="stylesheet" href="calci.css">
+        <script>
+            let size=50;
+            let c=10;
+            let val='';
+            let stack=[];
+            document.addEventListener('DOMContentLoaded',animate);
+
+            function animate(){
+                let doc=document.querySelector('#h1');
+                doc.style.animationPlayState="running";
+                doc.addEventListener('animationend',()=>{
+                    document.querySelector('#animation').style.display='none';
+                    document.querySelector('#calci').style.display='block';
+                    type();
+                })
+            }
+
+            function type(){
+                document.querySelectorAll('.btn').forEach(button=>{
+                    button.onclick=()=>{
+                        //document.querySelector('#res').innerHTML='';
+                        
+                        if(val.length<20 && button.dataset.num!="="){
+                            document.querySelector('#res').display='none';
+                            if(button.dataset.num==='()'){
+                                if(stack.length===0){
+                                    val=val+'*'+'(';
+                                    stack.push('(');
+                                }
+                                else{
+                                    val=val+')';
+                                    stack.pop(')');
+                                }
+                            }
+                            else if(val[val.length-1]===")"){
+                                if(isNaN(button.dataset.num)){
+                                    val=val+button.dataset.num;
+                                }
+                                else{
+                                    val=val+"*"+button.dataset.num;
+                                }}
+                            else{
+                                val=val+button.dataset.num;
+
+                            } 
+                        }
+                        else{
+                            if (stack.length!=0){
+                                val=val+')';
+                            }
+                            let result=eval(val);
+                            if(!Number.isInteger(result)){
+                                result=result.toFixed(3);
+                            }
+                            document.querySelector('.ans_space').style.height='150px';
+                            document.querySelector('#res').style.display='block';
+                            document.querySelector('#res').innerHTML=result;
+                        }
+                        if(val.length%c==0){
+                            size=size-5;
+                            c=c+3;
+                            document.querySelector('.ans_space').style.fontSize=`${size}px`;
+                        }
+                        document.querySelector('.ans_space').innerHTML=val;
+                    }
+                })
+
+
+                document.querySelector('.ac').onclick=()=>{
+                    val='';
+                    document.querySelector('.ans_space').style.height='250px';
+                    document.querySelector('#res').style.display='none';
+                    document.querySelector('.ans_space').innerHTML=null;
+                }
+                document.querySelector('.del').onclick=()=>{
+                    val=val.slice(0,-1);
+                    document.querySelector('.ans_space').innerHTML=val;
+                }
+            }
+
+        </script>
+    </head>
+    <body>
+        <div id="animation">
+            <h1 id="h1">CALCULATOR</h1>
+            <p id="p">Simple Calculator for easy use</p>
+        </div>
+        <div id="calci">
+        <h1 class="title">CALCULATOR</h1>
+        <div class="ans_space"></div>
+        <div id="res"></div>
+        <div class="wrap">
+        <div class="first">
+            <div class="main3">
+                <!--button class="btn2 history">History</button-->
+                <button class="btn1 ac">AC</button>
+                <button class="btn1 del">del</button>
+                <button class="btn col" data-num="/">/</button>
+            </div>
+            <div class="main3">
+                <button class="btn" data-num="7">7</button>
+                <button class="btn" data-num="8">8</button>
+                <button class="btn" data-num="9">9</button>
+                
+            </div>
+            <div class="main3">
+                <button class="btn" data-num="4">4</button>
+                <button class="btn" data-num="5">5</button>
+                <button class="btn" data-num="6">6</button>
+                
+            </div>
+            <div class="main3">
+                <button class="btn" data-num="1">1</button>
+                <button class="btn" data-num="2">2</button>
+                <button class="btn" data-num="3">3</button>
+            </div>
+            <div class="main3">
+                <button class="btn" data-num="()">()</button>
+                <button class="btn" data-num="0">0</button>
+                <button class="btn" data-num=".">.</button>
+                
+            </div>
+        </div>
+            <div class="second">
+                <div><button class="btn col" data-num="*">*</button></div>
+                <div><button class="btn col" data-num="-">-</button></div>
+                <div><button class="btn btnplus" data-num="+">+</button></div>
+                <div><button class="btn btneql" data-num="=" >=</button></div>
+            </div>
+        
+        </div>
+    </div>
+    </body>
+</html>
